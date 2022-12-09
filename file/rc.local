@@ -1,0 +1,2 @@
+#!/bin/sh -e
+ssserver -c /home/wangwaking/ss.json -d start&
