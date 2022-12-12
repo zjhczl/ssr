@@ -1,17 +1,44 @@
-[TOC]	
-# 安装谷歌浏览器 chrome
+- [1. 安装谷歌浏览器 chrome](#1-安装谷歌浏览器-chrome)
+  - [1.1. 方法1](#11-方法1)
+  - [1.2. 方法2](#12-方法2)
+  - [1.3. chrome jetson 下不断输入密码的解决方法](#13-chrome-jetson-下不断输入密码的解决方法)
+- [2. 安装ssr客户端](#2-安装ssr客户端)
+- [3. 新建并编辑配置文件](#3-新建并编辑配置文件)
+  - [3.1. **客户端配置文件**](#31-客户端配置文件)
+  - [3.2. **服务端配置文件**](#32-服务端配置文件)
+  - [3.3. 详细配置](#33-详细配置)
+- [4. 启动服务](#4-启动服务)
+  - [4.1. 1.服务端](#41-1服务端)
+    - [4.1.1. 1.1 开启BBR](#411-11-开启bbr)
+    - [4.1.2. 1.2 启动ssr服务端](#412-12-启动ssr服务端)
+  - [4.2. 2.客户端](#42-2客户端)
+- [5. 使用](#5-使用)
+  - [5.1. 启动命令：](#51-启动命令)
+  - [5.2. 命令查看](#52-命令查看)
+  - [5.3. 命令停止](#53-命令停止)
+  - [5.4. 完整路径命令](#54-完整路径命令)
+  - [5.5. 代理客户端使用](#55-代理客户端使用)
+  - [5.6. 其他ubuntu的联合使用](#56-其他ubuntu的联合使用)
+  - [5.7. ubuntu 使用全局代理的一般方法](#57-ubuntu-使用全局代理的一般方法)
+  - [5.8. ubuntu 使用全局代理的终极方法 proxychains4](#58-ubuntu-使用全局代理的终极方法-proxychains4)
+  - [5.9. 手机使用SSR](#59-手机使用ssr)
+- [6. 参考](#6-参考)
+- [7. 问题](#7-问题)
+  - [7.1. python3.10 的问题](#71-python310-的问题)
 
-## 方法1
+# 1. 安装谷歌浏览器 chrome
+
+## 1.1. 方法1
 	sudo wget http://www.linuxidc.com/files/repo/google-chrome.list -P /etc/apt/sources.list.d/
 	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub  | sudo apt-key add -
 	sudo apt-get update
 	sudo apt-get install google-chrome-stable
 	启动: google-chrome-stable
-## 方法2
+## 1.2. 方法2
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo dkpg -i XXX.deb
 
-## chrome jetson 下不断输入密码的解决方法
+## 1.3. chrome jetson 下不断输入密码的解决方法
 
 >Q18：如何解决Chrome需要输入密码解锁问题？
 
@@ -28,7 +55,7 @@
 
 >https://www.jianshu.com/p/e73471cbe5cd   中的方法二
 
-# 安装ssr客户端
+# 2. 安装ssr客户端
 
 	下载3.0可以通过 
 ```shell
@@ -38,9 +65,9 @@ sudo pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip 
    若有警告提示,可根据提示下载:
       sudo apt-get install shadowsocks
 
-# 新建并编辑配置文件
+# 3. 新建并编辑配置文件
 
-## **客户端配置文件**
+## 3.1. **客户端配置文件**
 
 	新建一个命名cc.json的文件,并配置如下：
 
@@ -57,7 +84,7 @@ sudo pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip 
 }
 ```
 
-## **服务端配置文件**
+## 3.2. **服务端配置文件**
 
 	新建一个命名ss.json的文件,并配置如下：
 
@@ -74,7 +101,7 @@ sudo pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip 
 "fast_open": false
 } 
 ```
-## 详细配置
+## 3.3. 详细配置
 终端输入 ssserver 后回车会见到以下提示：
 ```
 Proxy options:
@@ -127,11 +154,11 @@ General options:
 
 
 ```
-# 启动服务
+# 4. 启动服务
 
 
-## 1.服务端
-### 1.1 开启BBR
+## 4.1. 1.服务端
+### 4.1.1. 1.1 开启BBR
 
 由于ubuntu设置，并未默认开启BBR。
 
@@ -161,20 +188,20 @@ lsmod | grep bbr
 若输出行中包含bbr字样则表示开启正确。
 
 系统和BBR都准备完毕后就可以安装SSR了。
-### 1.2 启动ssr服务端
+### 4.1.2. 1.2 启动ssr服务端
 
 ```shell
 	ssserver -c ss.json -d start 
 ```
 
-## 2.客户端
+## 4.2. 2.客户端
 
 ```shell
 sslocal -c cc.json start
 ```
 
-# 使用
-## 启动命令：
+# 5. 使用
+## 5.1. 启动命令：
 
 ```
 ssserver -c /etc/shadowsocks.json -d start
@@ -182,33 +209,33 @@ ssserver -c /etc/shadowsocks.json -d start
  
 
 
-## 命令查看
+## 5.2. 命令查看
 ``` 
 netstat -tunlp 
 ```
 
 
-## 命令停止
+## 5.3. 命令停止
 ```
 ssserver -c /etc/shadowsocks/config.json -d stop
 ```
 
 
  
-## 完整路径命令
+## 5.4. 完整路径命令
 ```
 /usr/bin/ssserver -c /etc/shadowsocks.json --log-file=/tmp/ss.log -d start
 ```
 
-## 代理客户端使用
+## 5.5. 代理客户端使用
 	启动ubuntu系统自带的 sockets  代理设置即可
 	最后打开 chrome 直接上网 (谷歌浏览器默认的代理只有是系统自带的)
 	good luck!
-## 其他ubuntu的联合使用
+## 5.6. 其他ubuntu的联合使用
 > 当一台ubuntu电脑终端打开客户端时,本机会在设置界面的网络--代理--socks设置里填写 0.0.0.0:1080的字样连接本机的代理,同样在同一个局域网下的另一台ubuntu电脑也可以通过界面的网络--代理--socks设置里填写 ${那台运行ssr代理的电脑的IP}:1080 来共享ssr代理.
 
 
-## ubuntu 使用全局代理的一般方法
+## 5.7. ubuntu 使用全局代理的一般方法
 ```shell
 export http_proxy=http://127.0.0.1:1080
 export https_proxy=https://127.0.0.1:1080
@@ -216,7 +243,7 @@ export ALL_PROXY=socks5://127.0.0.1:1080
 ```
 这种用法只限于在终端中使用，在当前终端中使用是只是在此终端使用，写到bashrc里的话则是所有终端都可以使用。但不适合终端的子进程和带gui的程序。
 
-## ubuntu 使用全局代理的终极方法 proxychains4
+## 5.8. ubuntu 使用全局代理的终极方法 proxychains4
 前面的ssr 在ubuntu的使用，多多少少有局限，比如在终端中就不能全部使用全部代理，子进程会出现报错。
 这里推荐使用proxychains4
 使用方法： 在终端命令前加  proxychains4 即可。
@@ -236,7 +263,7 @@ proxychains4 xxx
 
 xxx的所有连接就可以走proxychains4 了
 ```
-## 手机使用SSR
+## 5.9. 手机使用SSR
 
 <center>
 
@@ -252,7 +279,7 @@ xxx的所有连接就可以走proxychains4 了
 
 
 
-# 参考
+# 6. 参考
 
 >https://www.ubuntukylin.com/ukylin/forum.php?mod=viewthread&tid=188059
 
@@ -261,7 +288,7 @@ xxx的所有连接就可以走proxychains4 了
 >https://wmdpd.com/awsshang-bu-shu-ssr/
 
 
-# 问题
+# 7. 问题
 
 ```shell
 gray@localhost:~$ sudo ssserver -c /etc/shadowsocks.json -d start
@@ -292,7 +319,7 @@ gray@localhost:~$ whereis ssserver
 
 已经安装到/usr目录下面，重新启动就正常了。
 
-## python3.10 的问题
+## 7.1. python3.10 的问题
 
 运行 ssserver 报错：
 ```shell
