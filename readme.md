@@ -25,6 +25,7 @@
 - [6. 参考](#6-参考)
 - [7. 问题](#7-问题)
   - [7.1. python3.10 的问题](#71-python310-的问题)
+  - [7.2. git出现问题](#72-git出现问题)
 
 # 1. 安装谷歌浏览器 chrome
 
@@ -335,3 +336,11 @@ collections.MutableMapping
 collections.abc.MutableMapping
 ```
 直接修改源码既可以。
+
+## 7.2. git出现问题
+
+fatal: unable to access 'https://github.com/zjhczl/server.git/': Failed to receive SOCKS4 connect request ack.
+
+```
+git config --global http.proxy 'socks5://127.0.0.1:1080'
+```
